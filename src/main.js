@@ -3,7 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store/store'
 import FastClick from 'fastclick'
+import LyTab from 'ly-tab'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
 
+Vue.use(VueAwesomeSwiper)
+Vue.use(LyTab)
 FastClick.attach(document.body);
 Vue.config.productionTip = false
 

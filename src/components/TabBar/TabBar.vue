@@ -2,31 +2,31 @@
   <div class="bottom-tab">
     <span class="tab-item" @click="switchTo('/home')">
       <img
-        :src="'/home' === $route.path ? require('./../../../static/img/icon_home_selected.png') : require('./../../../static/img/icon_home.png')"
+        :src=" $route.path.includes('/home') ? require('./../../../static/img/icon_home_selected.png') : require('./../../../static/img/icon_home.png')"
       >
       <span :class="{no: '/home' === $route.path}">首页</span>
     </span>
     <span class="tab-item" @click="switchTo('/recommend')">
       <img
-        :src="'/recommend' === $route.path ? require('./../../../static/img/icon_intro_selected.png') : require('./../../../static/img/icon_intro.png')"
+        :src=" $route.path.includes('/recommend') ? require('./../../../static/img/icon_intro_selected.png') : require('./../../../static/img/icon_intro.png')"
       >
       <span :class="{no: '/recommend' === $route.path}">推荐</span>
     </span>
     <span class="tab-item" @click="switchTo('/search')">
       <img
-        :src="'/search' === $route.path ? require('./../../../static/img/icon_search_selected.png') : require('./../../../static/img/icon_search.png')"
+        :src="$route.path.includes('/search') ? require('./../../../static/img/icon_search_selected.png') : require('./../../../static/img/icon_search.png')"
       >
       <span :class="{no: '/search' === $route.path}">搜索</span>
     </span>
     <span class="tab-item" @click="switchTo('/chat')">
       <img
-        :src="'/chat' === $route.path ? require('./../../../static/img/icon_chat_selected.png') : require('./../../../static/img/icon_chat.png')"
+        :src="$route.path.includes('/chat') ? require('./../../../static/img/icon_chat_selected.png') : require('./../../../static/img/icon_chat.png')"
       >
       <span :class="{no: '/chat' === $route.path}">聊天</span>
     </span>
     <span class="tab-item" @click="switchTo('/me')">
       <img
-        :src="'/me' === $route.path ? require('./../../../static/img/icon_mine_selected.png') : require('./../../../static/img/icon_mine.png')"
+        :src="$route.path.includes('/me') ? require('./../../../static/img/icon_mine_selected.png') : require('./../../../static/img/icon_mine.png')"
       >
       <span :class="{no: '/me' === $route.path}">我的</span>
     </span>
