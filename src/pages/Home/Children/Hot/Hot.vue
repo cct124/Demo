@@ -24,6 +24,8 @@ export default {
   name: "Hot",
   mounted() {
     this.$store.dispatch("reqHomeCasual");
+    this.$store.dispatch("reqHomeNav");
+    this.$store.dispatch("reqHomeShopList");
   },
   components: {
     HotNav,

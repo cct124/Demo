@@ -43,7 +43,6 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch("reqHomeNav");
     this.getBottomBarWidth();
     this.bindEvent();
   },
