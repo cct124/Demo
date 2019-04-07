@@ -1,42 +1,36 @@
 <template>
   <div class="hot">
-    <swiper :options="swiperOption" class="rowing">
+    <swiper :options="swiperOption" class="rowing" v-if="homecasual.length > 0">
       <!-- slides -->
-      <swiper-slide>
-        <img src="./../../imgs/rowing/s1.png">
+      <swiper-slide v-for="(casual, index) in homecasual" :key="index">
+        <img :src="casual.imgurl">
       </swiper-slide>
-      <swiper-slide>
-        <img src="./../../imgs/rowing/s2.png">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="./../../imgs/rowing/s3.png">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="./../../imgs/rowing/s4.png">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="./../../imgs/rowing/s5.png">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="./../../imgs/rowing/s6.png">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="./../../imgs/rowing/s7.png">
-      </swiper-slide>
-      <div class="swiper-pagination"  slot="pagination"></div>
+      <div class="swiper-pagination" slot="pagination"></div>
     </swiper>
     <hot-nav/>
+    <div class="hot-ad">
+      <img src="./../../imgs/hot_ad/home_ad.gif" width="100%">
+    </div>
+    <hot-shop-list/>
   </div>
 </template>
 
 <script>
-
-import HotNav from './HotNav'
+import HotNav from "./HotNav";
+import HotShopList from "./HotShopList";
+import { mapState } from "vuex";
 
 export default {
   name: "Hot",
-  components:{
-    HotNav
+  mounted() {
+    this.$store.dispatch("reqHomeCasual");
+  },
+  components: {
+    HotNav,
+    HotShopList
+  },
+  computed: {
+    ...mapState(["homecasual"])
   },
   data() {
     return {
@@ -57,8 +51,6 @@ export default {
       }
     };
   },
-  computed: {
-  },
   methods: {
     callback() {
       console.log("1");
@@ -73,6 +65,12 @@ export default {
   height: 100%;
   padding-top: 46px;
   background: #f5f5f5;
+
+  .hot-ad {
+    background-color: #ffffff;
+    margin: 8px 0;
+    padding: 5px;
+  }
 
   .rowing {
     img {
