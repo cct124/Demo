@@ -25,12 +25,19 @@
       </swiper-slide>
       <div class="swiper-pagination"  slot="pagination"></div>
     </swiper>
+    <hot-nav/>
   </div>
 </template>
 
 <script>
+
+import HotNav from './HotNav'
+
 export default {
   name: "Hot",
+  components:{
+    HotNav
+  },
   data() {
     return {
       swiperOption: {
