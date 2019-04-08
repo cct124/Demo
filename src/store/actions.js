@@ -1,5 +1,5 @@
-import { getHomeCasual, getHomeNav, getHomeShopList, getRecommendShopList } from '../api/index'
-import { HOME_CASUAL, HOME_NAV, HOME_SHOP_LIST, RECOMMEND_SHOP_LIST } from './mutation-types'
+import { getHomeCasual, getHomeNav, getHomeShopList, getRecommendShopList, getSearchGoods } from '../api/index'
+import { HOME_CASUAL, HOME_NAV, HOME_SHOP_LIST, RECOMMEND_SHOP_LIST, SEARCH_GOODS } from './mutation-types'
 
 export default {
     async reqHomeCasual({ commit }) {
@@ -20,5 +20,10 @@ export default {
     async reqRecommendShopList({ commit }) {
         const result = await getRecommendShopList()
         commit(RECOMMEND_SHOP_LIST, { recommendshoplist: result.message.data })
+    },
+
+    async reqSearchGoods({ commit }) {
+        const result = await getSearchGoods()
+        commit(SEARCH_GOODS, { searchgoods: result.message.data })
     }
 }
