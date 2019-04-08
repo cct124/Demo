@@ -22,8 +22,9 @@ export default {
         commit(RECOMMEND_SHOP_LIST, { recommendshoplist: result.message.data })
     },
 
-    async reqSearchGoods({ commit }) {
+    async reqSearchGoods({ commit }, callback) {
         const result = await getSearchGoods()
         commit(SEARCH_GOODS, { searchgoods: result.message.data })
+        callback && callback()
     }
 }
