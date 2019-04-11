@@ -1,15 +1,13 @@
 <template>
-  <div class="shoplist">
-    <a class="recommend-item">
-      <img :src="item.thumb_url" width="100%" v-if="item.thumb_url">
-      <h4 class="item-title">{{ item.short_name }}</h4>
-      <div class="item-bottom">
-        <span class="item-price">￥{{ item.price / 100 }}</span>
-        <span class="item-sales">{{ item.sales_tip }}</span>
-        <button class="item-btn">找相关</button>
-      </div>
-    </a>
-  </div>
+  <a class="recommend-item">
+    <img :src="item.hd_thumb_url" width="100%">
+    <h4 class="item-title">{{item.short_name}}</h4>
+    <div class="item-bottom">
+      <span class="item-price">¥{{item.price / 100}}</span>
+      <span class="item-sales">{{item.sales_tip}}</span>
+      <button class="item-btn">找相关</button>
+    </div>
+  </a>
 </template>
 
 <script>

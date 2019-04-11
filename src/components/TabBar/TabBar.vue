@@ -53,7 +53,7 @@ export default {
   left: 0;
   bottom: 0;
   display: flex;
-  z-index: 5;
+  z-index: 3;
 
   .tab-item {
     display: flex;

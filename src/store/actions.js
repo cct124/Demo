@@ -4,7 +4,7 @@ import { HOME_CASUAL, HOME_NAV, HOME_SHOP_LIST, RECOMMEND_SHOP_LIST, SEARCH_GOOD
 export default {
     async reqHomeCasual({ commit }) {
         const result = await getHomeCasual()
-        commit(HOME_CASUAL, { homecasual: result.message.data })
+        commit(HOME_CASUAL, { homecasual: result.message })
     },
 
     async reqHomeNav({ commit }) {
@@ -17,9 +17,10 @@ export default {
         commit(HOME_SHOP_LIST, { homeshoplist: result.message.goods_list })
     },
 
-    async reqRecommendShopList({ commit }) {
-        const result = await getRecommendShopList()
-        commit(RECOMMEND_SHOP_LIST, { recommendshoplist: result.message.data })
+    async reqRecommendShopList({ commit }, params) {
+        const result = await getRecommendShopList(params);
+        commit(RECOMMEND_SHOP_LIST, { recommendshoplist: result.message });
+        params.callback && params.callback();
     },
 
     async reqSearchGoods({ commit }, callback) {

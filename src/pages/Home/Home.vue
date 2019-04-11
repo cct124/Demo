@@ -45,7 +45,7 @@ export default {
     position fixed
     left 0
     top 0
-    z-index 5
+    z-index 3
     background-color #ffffff
   }
 }

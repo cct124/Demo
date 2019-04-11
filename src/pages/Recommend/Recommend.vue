@@ -1,15 +1,6 @@
 <template>
   <div class="recommend-container" v-if="recommendshoplist.length > 0">
     <ul class="recommend">
-      <!-- <li class="recommend-item" v-for="(item, index) in recommendshoplist" :key="index">
-        <img :src="item.thumb_url" width="100%" v-if="item.thumb_url">
-        <h4 class="item-title">{{ item.short_name }}</h4>
-        <div class="item-bottom">
-          <span class="item-price">￥{{ item.price / 100 }}</span>
-          <span class="item-sales">{{ item.sales_tip }}</span>
-          <button class="item-btn">找相关</button>
-        </div>
-      </li>-->
       <shop-list v-for="(item, index) in recommendshoplist" :item="item" :key="index"/>
     </ul>
   </div>
@@ -18,17 +9,68 @@
 <script>
 import { mapState } from "vuex";
 import ShopList from "./../../components/ShopList/ShopList";
+import BScroll from "better-scroll";
+import { Indicator } from "mint-ui";
 
 export default {
   name: "Recommend",
+  data() {
+    return {
+      page: 1,
+      count: 20
+    };
+  },
   mounted() {
-    this.$store.dispatch("reqRecommendShopList");
+    Indicator.open("加载中...");
+    // console.log(Indicator.open());
+
+    this.$store.dispatch("reqRecommendShopList", {
+      page: this.page,
+      count: this.count,
+      callback: () => {
+        Indicator.close();
+      }
+    });
   },
   computed: {
     ...mapState(["recommendshoplist"])
   },
   components: {
     ShopList
+  },
+  watch: {
+    recommendshoplist() {
+      this.$nextTick(() => {
+        this.page += 1;
+        this._initBScroll();
+        Indicator.close();
+      });
+    }
+  },
+  methods: {
+    _initBScroll() {
+      this.listScroll = new BScroll(".recommend-container", {
+        scrollY: true,
+        probeType: 3
+      });
+      this.listScroll.on("touchEnd", pos => {
+        if (pos.y >= 50) {
+          console.log("页面刷新");
+        }
+        if (this.listScroll.maxScrollY > pos.y + 50) {
+          console.log("下拉加载");
+          Indicator.open("加载中...");
+          this.$store.dispatch("reqRecommendShopList", {
+            page: this.page,
+            count: this.count
+          });
+        }
+        console.log(this.listScroll.maxScrollY, pos.y);
+      });
+      this.listScroll.on("scrollEnd", () => {
+        this.listScroll.refresh();
+      });
+    }
   }
 };
 </script>
@@ -38,13 +80,14 @@ export default {
   background: #F5F5F5;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 
   .recommend {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     background: #F5F5F5;
-    margin-bottom: 50px;
+    padding-bottom: 50px;
   }
 }
 </style>

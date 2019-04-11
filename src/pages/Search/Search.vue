@@ -1,16 +1,23 @@
 <template>
   <div class="Search">
-    <search-nav/>
+    <search-nav :isShowSearchPanel="isShowSearchPanel"/>
     <div class="shop">
       <div class="menu-wrapper">
         <ul>
-          <li class="menu-item" v-for="(item, index) in searchgoods" :key="index">
+          <li
+            class="menu-item"
+            :class="{ current:index === currentIndex }"
+            v-for="(item, index) in searchgoods"
+            :key="index"
+            @click="clickLeftItem(index)"
+            ref="menulist"
+          >
             <span>{{ item.name }}</span>
           </li>
         </ul>
       </div>
       <div class="shop-wrapper">
-        <ul>
+        <ul ref="shopsParent">
           <li class="shops-li" v-for="(goods, index) in searchgoods" :key="index">
             <div class="shops-title">
               <h4>{{ goods.name }}</h4>
@@ -31,40 +38,90 @@
         </ul>
       </div>
     </div>
+    <search-panel :isShowSearchPanel="isShowSearchPanel" v-if="isShow"/>
   </div>
 </template>
 
 <script>
 import SearchNav from "./children/SearchNav";
+import SearchPanel from "./children/SearchPanel";
 import { mapState } from "vuex";
 import BScroll from "better-scroll";
 
 export default {
   name: "Search",
+  data() {
+    return {
+      scrollY: 0,
+      rightLiTops: [],
+      isShow: false
+    };
+  },
   mounted() {
-    this.$store.dispatch("reqSearchGoods", () => {
-      this._initBScroll();
-    });
+    this.$store.dispatch("reqSearchGoods"); //或者使用CallBack回调来进行异步
   },
   computed: {
-    ...mapState(["searchgoods"])
+    ...mapState(["searchgoods"]),
+    currentIndex() {
+      const { scrollY, rightLiTops } = this;
+
+      return rightLiTops.findIndex((liTops, index) => {
+        this._leftScroll(index);
+        return scrollY >= liTops && scrollY < rightLiTops[index + 1];
+      });
+    }
   },
   components: {
-    SearchNav
+    SearchNav,
+    SearchPanel
   },
   watch: {
     searchgoods() {
-      // this.$nextTick(() => {
-      //   this._initBScroll();
-      // });
+      this.$nextTick(() => {
+        this._initBScroll();
+        this._initRightLiTops();
+      });
     }
   },
   methods: {
     /* eslint-disable */
 
     _initBScroll() {
-      let leftScroll = new BScroll(".menu-wrapper", {});
-      let RightScroll = new BScroll(".shop-wrapper", {});
+      this.leftScroll = new BScroll(".menu-wrapper", {});
+      this.rightScroll = new BScroll(".shop-wrapper", {
+        probeType: 3
+      });
+
+      this.rightScroll.on("scroll", pos => {
+        this.scrollY = Math.round(Math.abs(pos.y));
+      });
+    },
+
+    _initRightLiTops() {
+      const tempArr = [];
+      let top = 0;
+      tempArr.push(top);
+      let allLis = this.$refs.shopsParent.getElementsByClassName("shops-li");
+      [...allLis].forEach(li => {
+        top += li.clientHeight;
+        tempArr.push(top);
+      });
+      this.rightLiTops = tempArr;
+    },
+
+    clickLeftItem(index) {
+      this.scrollY = this.rightLiTops[index];
+      this.rightScroll.scrollTo(0, -this.scrollY, 300);
+    },
+
+    _leftScroll(index) {
+      let menulists = this.$refs.menulist;
+      let el = menulists[index];
+      this.leftScroll.scrollToElement(el, 300, 0, -300);
+    },
+
+    isShowSearchPanel(flag) {
+      this.isShow = flag;
     }
   }
 };
@@ -104,7 +161,7 @@ export default {
       }
 
       .current {
-        color: #e02e24;
+        color: #f32d0c;
         background-color: #ffffff;
       }
 
