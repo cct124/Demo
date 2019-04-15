@@ -12,6 +12,9 @@ export default {
   naem: "App",
   components: {
     TabBar
+  },
+  mounted() {
+    this.$store.dispatch("getUserInfo");
   }
 };
 </script>

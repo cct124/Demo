@@ -5,7 +5,7 @@
     <div class="item-bottom">
       <span class="item-price">¥{{item.price / 100}}</span>
       <span class="item-sales">{{item.sales_tip}}</span>
-      <button class="item-btn">找相关</button>
+      <button class="item-btn" @click="clickCell(item)">加入购物车</button>
     </div>
   </a>
 </template>
@@ -14,7 +14,11 @@
 export default {
   name: "ShopList",
   props: {
-    item: Object
+    item: Object,
+    clickCell: {
+      type: Function,
+      default: () => {}
+    }
   }
 };
 </script>
@@ -55,12 +59,12 @@ export default {
 
     .item-sales {
       flex: 4;
-      font-size: 10px;
+      font-size: 5px;
       color: #666666;
     }
 
     .item-btn {
-      flex: 2;
+      flex: 4;
       border: 1px solid orangered;
       height: 26px;
       border-radius: 5px;

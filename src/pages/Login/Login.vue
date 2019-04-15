@@ -41,11 +41,11 @@
           <div v-show="!loginMode">
             <section>
               <section class="login-message">
-                <input type="text" maxlength="11" placeholder="用户名/手机/邮箱">
+                <input type="text" maxlength="11" placeholder="用户名/手机/邮箱" v-model="user_naem">
               </section>
               <section class="login-verification">
-                <input type="password" maxlength="18" placeholder="密码" v-if="pwdMode">
-                <input type="text" maxlength="18" placeholder="密码" v-else>
+                <input type="password" maxlength="18" placeholder="密码" v-if="pwdMode" v-model="pwd">
+                <input type="text" maxlength="18" placeholder="密码" v-else v-model="pwd">
                 <div class="switch-show">
                   <img
                     @click.prevent="dealPwdMode(false)"
@@ -62,12 +62,12 @@
                 </div>
               </section>
               <section class="login-message">
-                <input type="text" maxlength="11" placeholder="验证码">
+                <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
                 <img
                   @click.prevent="getCaptcha()"
                   ref="captcha"
                   class="get-verification"
-                  src="http://127.0.0.1:3000/api/captcha"
+                  src="http://127.0.0.1:8081/api/api/captcha"
                   alt="captcha"
                 >
               </section>
@@ -75,14 +75,14 @@
           </div>
           <button class="login-submit" @click.prevent="login()">登录</button>
         </form>
-        <button class="login-back">返回</button>
+        <router-link tag="button" to="/home" class="login-back">返回</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getPhoneCode, phoneCodeLogin } from "./../../api/index.js";
+import { getPhoneCode, phoneCodeLogin, pwdLogin } from "./../../api/index.js";
 import { Toast } from "mint-ui";
 import { mapActions } from "vuex";
 
@@ -96,7 +96,9 @@ export default {
       pwdMode: true,
       pwd: "",
       code: "",
-      userInfo: {}
+      userInfo: {},
+      user_naem: "",
+      captcha: ""
     };
   },
   computed: {
@@ -117,7 +119,6 @@ export default {
         }, 1000);
       }
       let result = await getPhoneCode(this.phone);
-      console.log(result);
       if (result.err_code === 0) {
         Toast({
           message: result.message,
@@ -131,7 +132,7 @@ export default {
     },
     getCaptcha() {
       this.$refs.captcha.src =
-        "http://127.0.0.1:3000/api/captcha?time" + new Date();
+        "http://127.0.0.1:8081/api/api/captcha?time" + new Date();
     },
     async login() {
       if (this.loginMode) {
@@ -151,8 +152,6 @@ export default {
         }
 
         const result = await phoneCodeLogin(this.phone, this.code);
-        console.log(result);
-
         if (result.success_code === 200) {
           this.userInfo = result.message;
         } else {
@@ -160,13 +159,32 @@ export default {
             message: "登陆失败，手机号或验证码不正确!"
           };
         }
-
-        if (!this.userInfo.id) {
-          Toast(this.userInfo.message);
-        } else {
-          this.syncUserInfo(this.userInfo);
-          this.$router.back();
+      } else {
+        if (!this.user_naem) {
+          Toast("请输入用户名/手机/邮箱");
+          return;
+        } else if (!this.pwd) {
+          Toast("请输入密码");
+          return;
+        } else if (!this.captcha) {
+          Toast("请输入验证码");
+          return;
         }
+        const result = await pwdLogin(this.user_naem, this.pwd, this.captcha);
+        if (result.success_code === 200) {
+          this.userInfo = result.message;
+        } else {
+          this.userInfo = {
+            message: "登陆失败，手机号或验证码不正确!"
+          };
+        }
+      }
+
+      if (!this.userInfo.id) {
+        Toast(this.userInfo.message);
+      } else {
+        this.syncUserInfo(this.userInfo);
+        this.$router.replace("/me");
       }
     }
   }

@@ -4,7 +4,8 @@
       <img src="./images/lk_logo_sm.png" width="200">
     </div>
     <h4>选择登陆方式</h4>
-    <router-link tag="button" to="/login">手机登陆</router-link>
+    <router-link tag="button" to="/login" class="login-btn">手机登陆</router-link>
+    <router-link tag="button" to="/home" class="login-back">返回</router-link>
   </div>
 </template>
 
@@ -28,7 +29,7 @@ export default {
   justify-content: center;
   align-items: center;
 
-  button {
+  .login-btn {
     width: 80%;
     height: 38px;
     background-color: purple;
@@ -36,6 +37,17 @@ export default {
     border-radius: 5px;
     font-size: 20px;
     color: #fff;
+    margin-top: 30px;
+  }
+
+  .login-back {
+    width: 80%;
+    height: 38px;
+    background-color: transparent;
+    border: 1px solid #980f98b0;
+    border-radius: 5px;
+    font-size: 20px;
+    color: #bb1cbb;
     margin-top: 30px;
   }
 

@@ -1,7 +1,12 @@
 <template>
   <div class="recommend-container" v-if="recommendshoplist.length > 0">
     <ul class="recommend">
-      <shop-list v-for="(item, index) in recommendshoplist" :item="item" :key="index"/>
+      <shop-list
+        v-for="(item, index) in recommendshoplist"
+        :item="item"
+        :clickCell="dealWithCellBtnClick"
+        :key="index"
+      />
     </ul>
   </div>
 </template>
@@ -11,6 +16,7 @@ import { mapState } from "vuex";
 import ShopList from "./../../components/ShopList/ShopList";
 import BScroll from "better-scroll";
 import { Indicator } from "mint-ui";
+import { addGoodsToCart } from "./../../api/index.js";
 
 export default {
   name: "Recommend",
@@ -33,7 +39,7 @@ export default {
     });
   },
   computed: {
-    ...mapState(["recommendshoplist"])
+    ...mapState(["recommendshoplist", "userInfo"])
   },
   components: {
     ShopList
@@ -70,6 +76,17 @@ export default {
       this.listScroll.on("scrollEnd", () => {
         this.listScroll.refresh();
       });
+    },
+    async dealWithCellBtnClick(props) {
+      let params = {
+        userId: this.userInfo.id,
+        goods_id: props.goods_id,
+        goods_name: props.goods_name,
+        thumb_url: props.thumb_url,
+        price: props.price
+      };
+      let msg = await addGoodsToCart(params);
+      console.log(msg);
     }
   }
 };

@@ -22,7 +22,7 @@
       <img
         :src="$route.path.includes('/chat') ? require('./../../../static/img/icon_chat_selected.png') : require('./../../../static/img/icon_chat.png')"
       >
-      <span :class="{no: '/chat' === $route.path}">聊天</span>
+      <span :class="{no: '/chat' === $route.path}">购物车</span>
     </span>
     <span class="tab-item" @click="switchTo('/me')">
       <img

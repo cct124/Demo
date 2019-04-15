@@ -86,6 +86,22 @@ export default new Router({
       meta: {
         showBottomTabBar: true
       }
+    },
+    {
+      path: '/setting',
+      name: 'setting',
+      component: () => import('./pages/Me/MeSetting.vue'),
+      meta: {
+        showBottomTabBar: true
+      }
+    },
+    {
+      path: '/medetail',
+      name: 'medetail',
+      component: () => import('./pages/Me/MeDetail'),
+      meta: {
+        showBottomTabBar: true
+      }
     }
   ]
 })
